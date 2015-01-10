@@ -1,0 +1,6 @@
+KERNEL!="sd*" GOTO="usb_rules"
+ACTION=="add", ENV{mount_options}="relatime" , ENV{ID_FS_TYPE}=="vfat|ntfs", ENV{mount_options}="$env{mount_options},user,utf8,umask=000", ENV{dir_name}="usb-%k"
+ACTION=="add", RUN+="/bin/sh -c '/bin/mkdir -p /home/gil/%E{dir_name} ; /bin/mount -o %E{mount_options} /dev/%k /home/gil/%E{dir_name} ;  if  [ $? -ne 0 ] ; then  /bin/rmdir /home/gil/%E{dir_name} ; fi'"
+#ACTION=="add", RUN+="/bin/sh -c '/bin/echo %k >> /home/gil/touch "
+ACTION=="remove", RUN+="/bin/umount -l /home/gil/%E{dir_name}", RUN+="/bin/rmdir  /home/gil/%E{dir_name}"
+LABEL="usb_rules"
